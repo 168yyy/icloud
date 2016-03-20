@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="reminder">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/index.css">
+	<script src="js/angular.js"></script>
+</head>
+<body ng-controller="ctrl">
+	<div class="list">
+		<div class="title">
+			<div class="icloud"></div>
+			<div class="plus" title="新建提醒列表" ng-click="add()"></div>
+		</div>
+		<div class="planbox">
+			<i class="plan"></i>
+			<label class="plantit">已计划</label>		</div>
+		<ul>
+			<li class="planbox" ng-repeat="value in lists track by $index" ng-click="event($index)" ng-class="{focus:currentIndex == $index}">
+				<div class="colors {{value.color}}"></div>
+				<input type="text" class="listscon" ng-model='value.name' ng-blur="save()">
+			</li>
+		</ul>
+	</div>
+	<div class="reminder">
+		<div class="search">
+			<div class="searchimg"></div>
+			<div class="searchIn">搜索所有提醒</div>
+		</div>
+		<h3 ng-class='currentEvent.color'>{{currentEvent.name}}
+		</h3>
+		<label class='selector {{currentEvent.color}}' ng-show="currentEvent.name != undefined" ng-click="sele()">选项</label>
+		<ul class="finishedEvent">
+			<li>共：{{lists[currentIndex].items.length}}项</li>
+			<li ng-repeat="value in lists[currentIndex].items track by $index" ng-show="value.isDone" class='finished' ng-click="hideShow($index)">
+				<input type="text" ng-model="value.name" ng-blur="save()">
+				<div ng-show='value.hs'>
+					<div class="li{{currentEvent.color}} liTop"></div>
+					<div class="li{{currentEvent.color}} liDown"></div>
+					<div class="li{{currentEvent.color}} liCon"></div>
+				</div>
+				<div ng-click="value.isDone = false;haveDone($index);save()" class="do do{{currentEvent.color}}"></div>
+				<label class="do{{currentEvent.color}} del" ng-click="delEvent($index)" ng-show='value.hs'>删除</label>
+			</li>
+		</ul>
+		<ul class="noFinishedEvent">
+			<li ng-repeat="value in lists[currentIndex].items track by $index" ng-hide="value.isDone" ng-click="hideShow($index)">
+				<input type="text" ng-model="value.name" ng-blur="save()">
+				<div ng-show='value.hs'>
+					<div class="li{{currentEvent.color}} liTop"></div>
+					<div class="li{{currentEvent.color}} liDown"></div>
+					<div class="li{{currentEvent.color}} liCon"></div>
+				</div>
+				<div ng-click="value.isDone = true;haveDone($index);save()" class="doOrNo doOrNo{{currentEvent.color}}"></div>
+				<label class="do{{currentEvent.color}} del" ng-click="delEvent($index)" ng-show='value.hs'>删除</label>
+			</li>
+			<li class="newEvent" ng-click="willDo()">新项目...</li>
+		</ul>
+	</div>
+	<div class="selectorShow" ng-show="flag">
+		<input type="text" class="selectorText  {{currentEvent.color}}" ng-model='currentEvent.name' ng-blur="save()">
+		<span>列表颜色</span>
+		<ul>
+			<li  ng-repeat="value in color">
+				<em id="{{value}}" ng-click="lists[currentIndex].color = value"></em>
+			</li>
+		</ul>
+		<div class="button">
+			<span id="del" ng-click="flag = !flag;del()">删除</span>
+			<span id="back" ng-click="flag = !flag">取消</span>
+			<span id="shu"></span>
+			<span id="fin" ng-click="flag = !flag;save()">完成</span>
+		</div>
+	</div>
+	<script src="js/index.js"></script>
+</body>
+</html>
